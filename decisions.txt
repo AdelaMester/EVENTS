@@ -1,0 +1,1 @@
+First decision made was to make a simple and clear app thus I created a homepage with three menu buttons: "Create events", "Events", "Ticket status".
