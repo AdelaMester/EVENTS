@@ -16,13 +16,53 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{rows[0]}}</td>
+                <td id="update_tickets">{{rows[0]}}</td>
                 <td>{{rows[1]}}</td>
             </tr>
         </tbody>
     </table>
     <br>
-    <button name="add_tickets">Add tickets</button>
-    <button name="refresh_counter">Refresh counter</button>
+    <input type="hidden" id="event_id" value="{{event_id}}">
+    <input type="hidden" id="update_ticket" value="{{rows[0]}}">
+    <input type="number" placeholder="Add tickets" id="add_tickets">
+    <button onclick="addTickets()">Submit</button>
+    <br>
+    <br>
+    <button onclick="refreshCounter()">Refresh counter</button>
+    <p id="message"></p>
+    <script>
+
+        function addTickets() {
+            var params = new Object();
+            var data = document.getElementById("add_tickets").value;
+            var old_ticket = document.getElementById("update_ticket").value;
+            params.new_ticket = parseInt(data) + parseInt(old_ticket);
+            console.log("sum="+ params.new_ticket)
+            params.event_id = document.getElementById("event_id").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/update_tickets", true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify(params));
+            document.getElementById("add_tickets").value = "";
+            document.getElementById("message").innerHTML = "Request done successfully!";
+
+        }
+
+
+        function refreshCounter() {
+            var event_id = document.getElementById("event_id").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                   document.getElementById("update_tickets").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", "/total_tickets?"+ "event_id="+  event_id, true);
+            xhr.send();
+        }
+
+
+    </script>
+
 
 {% endblock %}
