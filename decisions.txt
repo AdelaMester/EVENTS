@@ -4,5 +4,6 @@ Created db "events.db" to be able to save the events.
 
 "Events"
   Decided to redirect the results of creating events on the "Events" page where they will be displayed in a table. 
+  Created a dynamic route for each event in order to display its details (Initial tickets, Redeemed tickets, Add tickets, Refresh counter).
   
  "Ticket status"
