@@ -30,3 +30,25 @@ def index():
 def create_event():
     if request.method == "GET":
         return render_template("create_event.html")
+
+    if request.method == "POST":
+        if not request.form.get("date"):
+            return ("Must insert date", 400)
+
+        if not request.form.get("name"):
+            return ("Must insert name", 400)
+
+        if not request.form.get("tickets"):
+            return ("Must insert number of tickets", 400)
+
+        datev = request.form.get("date")
+        namev = request.form.get("name")
+        ticketsv = request.form.get("tickets")
+
+        conn = sqlite3.connect('events.db')
+        print ("Opened database successfully")
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO events (date, event_name, total_tickets) VALUES (?,?,?)''', (datev, namev, ticketsv))
+        print("Insert done")
+        conn.commit()
+        return render_template("events.html")
