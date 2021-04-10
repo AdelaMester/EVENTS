@@ -6,5 +6,11 @@
 {% block main %}
 
    Check ticket status below:
+    <br>
+    <br>
+   <form action="ticket_status" method="POST">
+       <input type="number" placeholder="Ticket id" name="tickets">
+       <button type="submit">Submit</button>
+   </form>
 
 {% endblock %}
