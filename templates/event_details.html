@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   Event details
+{% endblock %}
+{% block main %}
+
+   Check details for {{rows[2]}} event below:
+
+    <table>
+        <thead>
+            <tr>
+                <th>Initial number of tickets</th>
+                <th>Redeemed tickets</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{rows[0]}}</td>
+                <td>{{rows[1]}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <button name="add_tickets">Add tickets</button>
+    <button name="refresh_counter">Refresh counter</button>
+
+{% endblock %}

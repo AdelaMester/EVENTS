@@ -60,8 +60,24 @@ def events():
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM events")
         rows = cursor.fetchall()
+        return render_template("events.html", results=rows)
+
+@app.route("/ticket_status", methods = ["GET"])
+def ticket_status():
+    if request.method == "GET":
+        return render_template("ticket_status.html")
+
+@app.route("/event/<int:event_id>", methods = ["GET"])
+def event_details(event_id):
+    if request.method == "GET":
+        conn = sqlite3.connect('events.db')
+        cursor = conn.cursor()
+        print(event_id)
+        cursor.execute("SELECT total_tickets, tickets_redeemed, event_name FROM events WHERE event_id=?", (event_id,))
+        rows = cursor.fetchall()
         print(rows[0])
         print(rows[0][0])
-        return render_template("events.html", results=rows)
+        return render_template("event_details.html", rows=rows[0])
+
 
 
