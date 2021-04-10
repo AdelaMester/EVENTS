@@ -6,5 +6,27 @@
 {% block main %}
 
     See the events list below:
+    <table>
+        <thead>
+            <tr>
+                <th>Event id</th>
+                <th>Date</th>
+                <th>Event name</th>
+                <th>Total number of tickets</th>
+                <th>Tickets redeemed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in results %}
+            <tr>
+                <td>{{event[0]}}</td>
+                <td>{{event[4]}}</td>
+                <td>{{event[1]}}</td>
+                <td>{{event[2]}}</td>
+                <td>{{event[3]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

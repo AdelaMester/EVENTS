@@ -51,4 +51,17 @@ def create_event():
         cursor.execute('''INSERT INTO events (date, event_name, total_tickets) VALUES (?,?,?)''', (datev, namev, ticketsv))
         print("Insert done")
         conn.commit()
-        return render_template("events.html")
+        return redirect("/events")
+
+@app.route("/events", methods = ["GET", "POST"])
+def events():
+    if request.method == "GET":
+        conn = sqlite3.connect('events.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM events")
+        rows = cursor.fetchall()
+        print(rows[0])
+        print(rows[0][0])
+        return render_template("events.html", results=rows)
+
+
