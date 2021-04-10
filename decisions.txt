@@ -1,6 +1,7 @@
 First decision made was to make a simple and clear app thus I created a homepage with three menu buttons: "Create events", "Events", "Ticket status".
 Created db "events.db" to be able to save the events.
-"Created events"
+"Create events"
+  Created the route and template.
 
 "Events"
   Decided to redirect the results of creating events on the "Events" page where they will be displayed in a table. 
@@ -11,3 +12,4 @@ Created db "events.db" to be able to save the events.
   
   
  "Ticket status"
+    Created template and appropriate route.
