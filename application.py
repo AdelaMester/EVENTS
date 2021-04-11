@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request
 import sqlite3
-
+import uuid
 
 # Configure application
 app = Flask(__name__)
@@ -26,6 +26,8 @@ def index():
         conn.close()
         return render_template("index.html")
 
+
+
 @app.route("/create_event", methods = ["GET", "POST"])
 def create_event():
     if request.method == "GET":
@@ -48,11 +50,31 @@ def create_event():
         conn = sqlite3.connect('events.db')
         print ("Opened database successfully")
         cursor = conn.cursor()
-        cursor.execute('''INSERT INTO events (date, event_name, total_tickets) VALUES (?,?,?)''', (datev, namev, ticketsv))
+        cursor.execute('''INSERT INTO events (date, event_name, total_tickets, tickets_redeemed) VALUES (?,?,?,0)''', (datev, namev, ticketsv))
         print("Insert done")
+        cursor.execute("SELECT event_id FROM events ORDER BY event_id DESC LIMIT 1")
+        eventid = cursor.fetchall()[0][0]
+        print(eventid)
         conn.commit()
         conn.close()
+        create_ticket(ticketsv, eventid)
         return redirect("/events")
+
+
+def create_ticket(ticket_number, event_id):
+    print (ticket_number)
+    print(event_id)
+    conn = sqlite3.connect('events.db')
+    for i in range (int(ticket_number)):
+        ticket_token = uuid.uuid4()
+        print(i)
+        print ("Opened database successfully2")
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO tickets (event_id, ticket_token, redeemed_ticket) VALUES (?,?,0)''', (event_id, str(ticket_token)))
+        print("Insert done2")
+        conn.commit()
+    conn.close()
+
 
 @app.route("/events", methods = ["GET", "POST"])
 def events():
@@ -106,3 +128,4 @@ def total_tickets():
         conn.commit()
         conn.close()
         return str(total_tickets)
+
