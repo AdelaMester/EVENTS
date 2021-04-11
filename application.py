@@ -56,11 +56,11 @@ def create_event():
         print(eventid)
         conn.commit()
         conn.close()
-        create_ticket(ticketsv, eventid)
+        create_ticket(ticketsv, eventid, 0)
         return redirect("/events")
 
 
-def create_ticket(ticket_number, event_id):
+def create_ticket(ticket_number, event_id, b):
     print (ticket_number)
     print(event_id)
     conn = sqlite3.connect('events.db')
@@ -71,6 +71,12 @@ def create_ticket(ticket_number, event_id):
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO tickets (event_id, ticket_token, redeemed_ticket) VALUES (?,?,0)''', (event_id, str(ticket_token)))
         print("Insert done2")
+        conn.commit()
+    if b == 1:
+        print ("call from js")
+        cursor.execute("SELECT total_tickets FROM events WHERE event_id=?", (event_id,))
+        tot_tickets = cursor.fetchall()[0][0]
+        cursor.execute("UPDATE events SET total_tickets=? WHERE event_id=?", (int(tot_tickets)+int(ticket_number), event_id))
         conn.commit()
     conn.close()
 
@@ -119,9 +125,11 @@ def event_details(event_id):
         rows = cursor.fetchall()
         cursor.execute("SELECT ticket_token, redeemed_ticket FROM tickets WHERE event_id=?", (event_id,))
         results = cursor.fetchall()
+        cursor.execute("SELECT COUNT(redeemed_ticket) FROM tickets WHERE event_id=? and redeemed_ticket=1", (event_id,))
+        total_redeemed = cursor.fetchall()[0][0]
         print(results)
         conn.close()
-        return render_template("event_details.html", rows=rows[0], event_id=event_id, results=results)
+        return render_template("event_details.html", rows=rows[0], event_id=event_id, results=results, total_redeemed=total_redeemed)
 
 
 @app.route("/update_tickets", methods = ["POST"])
@@ -135,6 +143,7 @@ def update_tickets():
         cursor.execute("UPDATE events SET total_tickets=? WHERE event_id=?", (request_data["new_ticket"], request_data["event_id"]))
         conn.commit()
         conn.close()
+        create_ticket(request_data["new_ticket"], request_data["event_id"], 1)
         return "ok"
 
 
@@ -145,8 +154,9 @@ def total_tickets():
         print(event_id)
         conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
-        total_tickets = cursor.execute("SELECT total_tickets FROM events WHERE event_id=?", (event_id))
+        total_tickets = cursor.execute("SELECT COUNT(ticket_token) FROM tickets WHERE event_id=?", (event_id,))
         total_tickets = (total_tickets.fetchall()[0][0])
+        print(total_tickets)
         conn.commit()
         conn.close()
         return str(total_tickets)

@@ -12,8 +12,6 @@
                 <th>Event id</th>
                 <th>Date</th>
                 <th>Event name</th>
-                <th>Total number of tickets</th>
-                <th>Tickets redeemed</th>
             </tr>
         </thead>
         <tbody>
@@ -22,8 +20,6 @@
                 <td>{{event[0]}}</td>
                 <td>{{event[4]}}</td>
                 <td><a href = "{{ url_for('event_details', event_id=event[0])}}">{{event[1]}}</a></td>
-                <td>{{event[2]}}</td>
-                <td>{{event[3]}}</td>
             </tr>
             {% endfor %}
         </tbody>
