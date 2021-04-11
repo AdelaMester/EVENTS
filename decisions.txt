@@ -1,7 +1,9 @@
 First decision made was to make a simple and clear app thus I created a homepage with three menu buttons: "Create events", "Events", "Ticket status".
 Created db "events.db" to be able to save the events.
+
 "Create events"
   Created the route and template.
+  Implemented a function that creates a unique token for each ticket, whenever an event is created with X number of tickets. In addition, created the table "tickets" in my db that stores all the unique ticket tokens.
 
 "Events"
   Decided to redirect the results of creating events on the "Events" page where they will be displayed in a table. 
