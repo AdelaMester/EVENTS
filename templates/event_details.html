@@ -11,7 +11,7 @@
         <thead>
             <tr>
                 <th>Initial number of tickets</th>
-                <th>Redeemed tickets</th>
+                <th>Total tickets redeemed</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +30,26 @@
     <br>
     <button onclick="refreshCounter()">Refresh counter</button>
     <p id="message"></p>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticket token</th>
+                <th>Redeemed ticket</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{result[0]}}</td>
+                <td>{{result[1]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
     <script>
 
         function addTickets() {

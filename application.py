@@ -27,7 +27,6 @@ def index():
         return render_template("index.html")
 
 
-
 @app.route("/create_event", methods = ["GET", "POST"])
 def create_event():
     if request.method == "GET":
@@ -86,10 +85,30 @@ def events():
         conn.close()
         return render_template("events.html", results=rows)
 
+
 @app.route("/ticket_status", methods = ["GET"])
 def ticket_status():
     if request.method == "GET":
         return render_template("ticket_status.html")
+
+
+@app.route("/redeem", methods = ["GET"])
+def token_status():
+    if request.method == "GET":
+        token = request.args.get("tickets")
+        print(token)
+        conn = sqlite3.connect('events.db')
+        cursor = conn.cursor()
+        row = cursor.execute("SELECT redeemed_ticket FROM tickets WHERE ticket_token=?", (token,))
+        print(row)
+        row = cursor.fetchall()
+        print(row[0])
+        conn.close()
+        if row[0][0] == 0:
+            return ("ok", 200)
+        else:
+            return ("GONE", 410)
+
 
 @app.route("/event/<int:event_id>", methods = ["GET"])
 def event_details(event_id):
@@ -98,8 +117,11 @@ def event_details(event_id):
         cursor = conn.cursor()
         cursor.execute("SELECT total_tickets, tickets_redeemed, event_name FROM events WHERE event_id=?", (event_id,))
         rows = cursor.fetchall()
+        cursor.execute("SELECT ticket_token, redeemed_ticket FROM tickets WHERE event_id=?", (event_id,))
+        results = cursor.fetchall()
+        print(results)
         conn.close()
-        return render_template("event_details.html", rows=rows[0], event_id=event_id)
+        return render_template("event_details.html", rows=rows[0], event_id=event_id, results=results)
 
 
 @app.route("/update_tickets", methods = ["POST"])
