@@ -10,8 +10,10 @@ Created db "events.db" to be able to save the events.
   Created a dynamic route for each event in order to display its details (Initial tickets, Redeemed tickets, Add tickets, Refresh counter).
   "Events/event_id"
     Created functionality for the buttons ("Add tickets", "Refresh counter") and added logic in the corresponding routes.
+    Displayed all ticket tokens belonging to the selected event.
   
   
   
  "Ticket status"
     Created template and appropriate route.
+    Displayed ticket status.
