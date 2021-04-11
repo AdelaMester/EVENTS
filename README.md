@@ -9,6 +9,6 @@ An event ticket management app
 ## Run application
 ```flask run```
 
-##Docker
+## Docker
 ```docker build -t my-python-app . ```
 ```docker run -it -p 80:80 --name my-running-app my-python-app```
