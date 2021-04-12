@@ -7,7 +7,7 @@ An event ticket management app
 ```export FLASK_APP=application.py```
 
 ## Run application
-```flask run --host=0.0.0.0 --port=80```
+```flask run```
 
 ## Docker
 ```docker build -t my-python-app . ```
