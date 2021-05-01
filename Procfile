@@ -1,1 +1,1 @@
-web: gunicorn NovaFutur.application:app
+web: gunicorn application:application
