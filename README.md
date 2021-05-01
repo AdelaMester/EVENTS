@@ -14,5 +14,3 @@ An event ticket management app
 
 ```docker run -it -p 80:80 --name my-running-app my-python-app```
 
-## The application is up and running at the following URL:
-```http://34.89.16.89/```
