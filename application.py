@@ -21,7 +21,7 @@ def after_request(response):
 @app.route("/", methods = ["GET"])
 def index():
     if request.method == "GET":
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         print ("Opened database successfully");
         conn.close()
         return render_template("index.html")
@@ -46,7 +46,7 @@ def create_event():
         namev = request.form.get("name")
         ticketsv = request.form.get("tickets")
 
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         print ("Opened database successfully")
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO events (date, event_name, total_tickets, tickets_redeemed) VALUES (?,?,?,0)''', (datev, namev, ticketsv))
@@ -63,7 +63,7 @@ def create_event():
 def create_ticket(ticket_number, event_id, b):
     print (ticket_number)
     print(event_id)
-    conn = sqlite3.connect('events.db.backup')
+    conn = sqlite3.connect('events.db')
     for i in range (int(ticket_number)):
         ticket_token = uuid.uuid4()
         print(i)
@@ -84,7 +84,7 @@ def create_ticket(ticket_number, event_id, b):
 @app.route("/events", methods = ["GET", "POST"])
 def events():
     if request.method == "GET":
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM events")
         rows = cursor.fetchall()
@@ -103,7 +103,7 @@ def token_status():
     if request.method == "GET":
         token = request.args.get("tickets")
         print(token)
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
         row = cursor.execute("SELECT redeemed_ticket FROM tickets WHERE ticket_token=?", (token,))
         print(row)
@@ -119,7 +119,7 @@ def token_status():
 @app.route("/event/<int:event_id>", methods = ["GET"])
 def event_details(event_id):
     if request.method == "GET":
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
         cursor.execute("SELECT total_tickets, tickets_redeemed, event_name FROM events WHERE event_id=?", (event_id,))
         rows = cursor.fetchall()
@@ -138,7 +138,7 @@ def update_tickets():
         request_data = request.get_json()
         print(request_data["new_ticket"])
         print(request_data["event_id"])
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
         cursor.execute("UPDATE events SET total_tickets=? WHERE event_id=?", (request_data["new_ticket"], request_data["event_id"]))
         conn.commit()
@@ -152,7 +152,7 @@ def total_tickets():
     if request.method == "GET":
         event_id = request.args.get("event_id")
         print(event_id)
-        conn = sqlite3.connect('events.db.backup')
+        conn = sqlite3.connect('events.db')
         cursor = conn.cursor()
         total_tickets = cursor.execute("SELECT COUNT(ticket_token) FROM tickets WHERE event_id=?", (event_id,))
         total_tickets = (total_tickets.fetchall()[0][0])
