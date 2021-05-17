@@ -5,6 +5,8 @@
 {% endblock %}
 {% block main %}
 
+
+    <!-- here is rows[2]=event name-->
    Check details for {{rows[2]}} event below:
 
     <table>
@@ -21,13 +23,13 @@
             </tr>
         </tbody>
     </table>
-    <br>
+    <br> <!--rows[0]= total tickets. this is a trick to have them accessible for java script-->
     <input type="hidden" id="event_id" value="{{event_id}}">
     <input type="hidden" id="update_ticket" value="{{rows[0]}}">
     <input type="number" placeholder="Add tickets" id="add_tickets">
     <button onclick="addTickets()">Submit</button>
     <br>
-    <br>
+    <br> <!-- we created the button -->
     <button onclick="refreshCounter()">Refresh counter</button>
     <p id="message"></p>
     <br>
@@ -51,33 +53,43 @@
 
 
     <script>
-
+    // this xhr refers to updating the number of tickets
         function addTickets() {
+            //we create a new object to be able to send the required parameters to /update_tickets
             var params = new Object();
             var data = document.getElementById("add_tickets").value;
             var old_ticket = document.getElementById("update_ticket").value;
+            // parse the variable as int
             params.new_ticket = parseInt(data);
+            // this is to differentiate the function call to tell that it comes from js and needs extra functionality
             params.update = 1;
+            // prints the total number of new tickets
             console.log("sum="+ params.new_ticket)
             params.event_id = document.getElementById("event_id").value;
+            // XMLHttpRequest is an object
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/update_tickets", true);
             xhr.setRequestHeader('Content-type', 'application/json');
+            // send the paras variable as json
             xhr.send(JSON.stringify(params));
+            // after the tickets are added and request was done, the initial number needs to disappear
             document.getElementById("add_tickets").value = "";
             document.getElementById("message").innerHTML = "Request done successfully!";
 
         }
 
-
+        //  this xhr request referes to refresh the number of total ticets to the new number of total tickets
         function refreshCounter() {
             var event_id = document.getElementById("event_id").value;
             var xhr = new XMLHttpRequest();
+            // when the status to the request becomes 200
             xhr.onreadystatechange = function() {
+                // code 4 means request is done and response status is 200
                 if (this.readyState == 4 && this.status == 200) {
                    document.getElementById("update_tickets").innerHTML = xhr.responseText;
                 }
             };
+            // to send to /total_tickets endpoint the event id concatenated to appear in the url
             xhr.open("GET", "/total_tickets?"+ "event_id="+  event_id, true);
             xhr.send();
         }

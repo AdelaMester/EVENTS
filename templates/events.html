@@ -16,9 +16,10 @@
         </thead>
         <tbody>
             {% for event in results %}
-            <tr>
+            <tr> <!-- these are all from events table -->
                 <td>{{event[0]}}</td>
                 <td>{{event[4]}}</td>
+                <!--this links gets me to the url events_details with the event_id parameter -->
                 <td><a href = "{{ url_for('event_details', event_id=event[0])}}">{{event[1]}}</a></td>
             </tr>
             {% endfor %}
