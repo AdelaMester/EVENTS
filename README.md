@@ -1,4 +1,4 @@
-# NovaFutur
+# EVENTS
 An event ticket management app
 
 ## Install application
