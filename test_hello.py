@@ -12,8 +12,3 @@ def test_index():
     response = app.test_client().get('/')
     assert response.status_code == 200
     assert response.data == b"Welcome to our Event Ticket Management page! "
-'''
-@pytest.fixture
-def client():
-    client = app.test_client()
-    return client'''
